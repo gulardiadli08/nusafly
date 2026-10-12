@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}NusaFly — Temukan penerbanganmu{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
+  <div class="hero-inner">
+    <div class="eyebrow"><span class="eyebrow-dot"></span> PERJALANAN DIMULAI DI SINI</div>
+    <h1>Jauh terasa<br><span>lebih dekat.</span></h1>
+    <p class="hero-copy">Temukan penerbangan yang pas untuk cerita perjalananmu berikutnya.</p>
+    <div class="hero-note"><span class="note-icon">✦</span> Pilihan rute domestik Indonesia</div>
+    <div class="plane-illustration" aria-hidden="true"><div class="plane-trail"></div><div class="plane">✈</div></div>
+  </div>
+</section>
+<section class="search-wrap">
+  <div class="search-card">
+    <div class="search-card-head"><div><span class="section-kicker">MULAI PETUALANGAN</span><h2>Mau terbang ke mana?</h2></div><span class="trip-pill">↗ Sekali jalan</span></div>
+    <form action="{% url 'search_flights' %}" method="get" class="search-form">
+      <label class="field"><span>✈ &nbsp;DARI</span><select name="origin" required><option value="">Pilih kota asal</option>{% for airport in airports %}<option value="{{ airport.iata_code }}">{{ airport.city }} ({{ airport.iata_code }})</option>{% endfor %}</select></label>
+      <button class="swap-button" type="button" aria-label="Tukar kota asal dan tujuan" id="swap-cities">⇄</button>
+      <label class="field"><span>⌖ &nbsp;KE</span><select name="destination" required><option value="">Pilih kota tujuan</option>{% for airport in airports %}<option value="{{ airport.iata_code }}">{{ airport.city }} ({{ airport.iata_code }})</option>{% endfor %}</select></label>
+      <label class="field"><span>▦ &nbsp;TANGGAL PERGI</span><input type="date" name="departure_date" min="{{ today }}" value="{{ today }}" required></label>
+      <label class="field"><span>♙ &nbsp;PENUMPANG</span><select name="passengers">{% for n in "123456" %}<option value="{{ n }}"{% if n == "1" %} selected{% endif %}>{{ n }} penumpang</option>{% endfor %}</select></label>
+      <button class="search-button" type="submit">Cari penerbangan <span>→</span></button>
+    </form>
+    <div class="search-foot"><span>✓ Harga transparan</span><span>✓ Pemesanan mudah</span><span>✓ Data demo untuk latihan</span></div>
+  </div>
+</section>
+<section class="destinations section-container">
+  <div class="section-heading"><div><span class="section-kicker">INSPIRASI PERJALANAN</span><h2>Indonesia menunggumu.</h2></div><p>Mulai dari kota yang familiar,<br>temukan tempat yang baru.</p></div>
+  <div class="destination-grid">
+    <a class="destination-card bali" href="/cari/?origin=CGK&destination=DPS&departure_date={{ today }}&passengers=1"><div class="destination-overlay"></div><div class="destination-content"><span class="destination-tag">PANTAI & ALAM</span><h3>Bali</h3><p>DPS · Denpasar</p><span class="destination-arrow">↗</span></div></a>
+    <a class="destination-card jogja" href="/cari/?origin=CGK&destination=YIA&departure_date={{ today }}&passengers=1"><div class="destination-overlay"></div><div class="destination-content"><span class="destination-tag">BUDAYA & RASA</span><h3>Yogyakarta</h3><p>YIA · Yogyakarta</p><span class="destination-arrow">↗</span></div></a>
+    <a class="destination-card surabaya" href="/cari/?origin=CGK&destination=SUB&departure_date={{ today }}&passengers=1"><div class="destination-overlay"></div><div class="destination-content"><span class="destination-tag">KOTA & KULINER</span><h3>Surabaya</h3><p>SUB · Surabaya</p><span class="destination-arrow">↗</span></div></a>
+  </div>
+</section>
+<section class="trust-strip"><div><strong>01</strong><span><b>Pilih penerbangan</b><small>Bandingkan jadwal dan harga demo</small></span></div><div><strong>02</strong><span><b>Isi data penumpang</b><small>Proses singkat dan sederhana</small></span></div><div><strong>03</strong><span><b>Konfirmasi pesanan</b><small>Lihat status pesanan kapan saja</small></span></div></section>
+{% endblock %}

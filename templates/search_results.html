@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Hasil pencarian — NusaFly{% endblock %}
+{% block content %}
+<section class="results-hero"><div class="section-container"><span class="section-kicker">HASIL PENCARIAN</span><h1>Temukan penerbanganmu.</h1><p>Semua harga dan jadwal di halaman ini merupakan data simulasi.</p>
+<form action="{% url 'search_flights' %}" method="get" class="results-search">
+<label><span>DARI</span><select name="origin"><option value="">Semua kota</option>{% for a in airports %}<option value="{{ a.iata_code }}" {% if origin == a.iata_code %}selected{% endif %}>{{ a.city }} ({{ a.iata_code }})</option>{% endfor %}</select></label>
+<label><span>KE</span><select name="destination"><option value="">Semua kota</option>{% for a in airports %}<option value="{{ a.iata_code }}" {% if destination == a.iata_code %}selected{% endif %}>{{ a.city }} ({{ a.iata_code }})</option>{% endfor %}</select></label>
+<label><span>TANGGAL</span><input type="date" name="departure_date" value="{{ departure_date }}"></label>
+<label><span>PENUMPANG</span><select name="passengers">{% for n in "123456" %}<option value="{{ n }}" {% if passengers|stringformat:"s" == n %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label><button class="search-button" type="submit">Cari lagi →</button>
+</form></div></section>
+<section class="section-container results-section"><div class="results-top"><div><span class="section-kicker">PILIHAN UNTUKMU</span><h2>{{ flights|length }} penerbangan ditemukan</h2></div><span class="demo-badge"><i></i> Tarif demo</span></div>
+{% for flight in flights %}
+<article class="flight-card"><div class="airline-block"><span class="airline-icon">{{ flight.airline.logo_emoji }}</span><div><strong>{{ flight.airline.name }}</strong><small>{{ flight.flight_number }}</small></div></div>
+<div class="flight-route"><div><strong>{{ flight.departure_at|date:"H:i" }}</strong><small>{{ flight.origin.iata_code }}</small></div><div class="route-line"><small>{{ flight.duration_minutes }} mnt</small><span></span><small>Langsung</small></div><div><strong>{{ flight.arrival_at|date:"H:i" }}</strong><small>{{ flight.destination.iata_code }}</small></div></div>
+<div class="flight-price"><small>Mulai dari</small><strong>Rp {{ flight.price|floatformat:0 }}</strong><small>/ orang</small></div><a class="outline-button" href="{% url 'flight_detail' flight.id %}">Pilih tiket <span>→</span></a></article>
+{% empty %}<div class="empty-state"><span>⌁</span><h3>Belum ada penerbangan</h3><p>Coba ubah tanggal atau kota asal dan tujuan. Data demo mungkin belum tersedia untuk rute ini.</p><a class="primary-link" href="/">Ubah pencarian</a></div>{% endfor %}
+<div class="disclaimer">ⓘ Ini adalah katalog penerbangan demo, bukan inventaris atau tarif langsung dari maskapai.</div></section>
+{% endblock %}
